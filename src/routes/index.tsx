@@ -44,6 +44,7 @@ const students: Student[] = [
 const allCourses = units.flatMap((unit) => unit.courses);
 const average = (values: number[]) => values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
 const categoryMean = (results: UnitResult[], category: "A" | "B") => average(results.filter((result) => result.unit.category === category).map((result) => result.mean));
+const unitTone = (code: string) => `ue-tone-${units.findIndex((unit) => unit.code === code) + 1}`;
 
 function semesterResult(student: Student, semester: 1 | 2): SemesterResult {
   const semesterUnits = units.filter((unit) => unit.semester === semester);
@@ -131,16 +132,16 @@ function Index() {
               <tr className="bg-academic text-academic-foreground">
                 <th rowSpan={3} className="w-10 border border-grid p-2">N°</th>
                 <th rowSpan={3} className="min-w-52 border border-grid p-2 text-left">NOM, POSTNOM & PRÉNOM</th>
-                {semesters.map((semester) => <th key={semester} colSpan={21} className="border border-grid p-2 uppercase">Semestre {semester} · 30 crédits</th>)}
-                {view === "annual" && <th colSpan={4} className="border border-grid p-2 uppercase">Synthèse annuelle</th>}
+                {semesters.map((semester) => <th key={semester} colSpan={21} className={`semester-title semester-${semester} border border-grid p-2 uppercase`}>Semestre {semester} · 30 crédits</th>)}
+                {view === "annual" && <th colSpan={4} className="annual-title border border-grid p-2 uppercase">Synthèse annuelle</th>}
               </tr>
               <tr className="bg-muted">
                 {semesters.map((semester) => <SemesterGroupHeader key={semester} semester={semester} />)}
                 {view === "annual" && <>
-                  <th rowSpan={2} className="border border-grid px-2">Moy. annuelle</th>
-                  <th rowSpan={2} className="border border-grid px-2">Crédits /60</th>
-                  <th rowSpan={2} className="border border-grid px-2">Décision finale</th>
-                  <th rowSpan={2} className="border border-grid px-2">Mention / dettes</th>
+                  <th rowSpan={2} className="annual-band border border-grid px-2">Moy. annuelle</th>
+                  <th rowSpan={2} className="annual-band border border-grid px-2">Crédits /60</th>
+                  <th rowSpan={2} className="annual-band border border-grid px-2">Décision finale</th>
+                  <th rowSpan={2} className="annual-band border border-grid px-2">Mention / dettes</th>
                 </>}
               </tr>
               <tr className="bg-card">
@@ -170,27 +171,27 @@ function Index() {
 
 function SemesterGroupHeader({ semester }: { semester: 1 | 2 }) {
   return <>
-    {units.filter((unit) => unit.semester === semester).map((unit) => <th key={unit.code} colSpan={4} className="border border-grid px-2 py-1.5">
+    {units.filter((unit) => unit.semester === semester).map((unit) => <th key={unit.code} colSpan={4} className={`${unitTone(unit.code)} ue-band-strong border border-grid px-2 py-1.5`}>
       <span className="font-extrabold">{unit.code}</span>
-      <span className="ml-1 font-extrabold text-academic">CAT. {unit.category}</span>
-      <span className="block max-w-36 truncate text-[7px] font-medium text-muted-foreground">{unit.name}</span>
+      <span className="ml-1 font-extrabold">CAT. {unit.category}</span>
+      <span className="block max-w-36 truncate text-[7px] font-medium opacity-80">{unit.name}</span>
     </th>)}
-    <th colSpan={5} className="border border-grid bg-academic/10 px-2 py-1.5 font-extrabold uppercase text-academic">Résumé S{semester}</th>
+    <th colSpan={5} className={`summary-${semester} summary-strong border border-grid px-2 py-1.5 font-extrabold uppercase`}>Résumé S{semester}</th>
   </>;
 }
 
 function SemesterColumnHeader({ semester }: { semester: 1 | 2 }) {
   return <>
     {units.filter((unit) => unit.semester === semester).flatMap((unit) => [
-      ...unit.courses.map((course) => <th key={course.code} className="h-32 w-9 border border-grid p-1 align-bottom"><span className="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap font-bold">{course.name} · {course.credits} Cr</span></th>),
-      <th key={`${unit.code}-mean`} className="w-11 border border-grid bg-muted/70 px-1">Moy.<br/>UE</th>,
-      <th key={`${unit.code}-decision`} className="w-14 border border-grid bg-muted/70 px-1">Décision<br/>UE</th>,
+      ...unit.courses.map((course) => <th key={course.code} className={`${unitTone(unit.code)} ue-band h-32 w-9 border border-grid p-1 align-bottom`}><span className="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap font-bold">{course.name} · {course.credits} Cr</span></th>),
+      <th key={`${unit.code}-mean`} className={`${unitTone(unit.code)} ue-band w-11 border border-grid px-1`}>Moy.<br/>UE</th>,
+      <th key={`${unit.code}-decision`} className={`${unitTone(unit.code)} ue-band w-14 border border-grid px-1`}>Décision<br/>UE</th>,
     ])}
-    <th className="w-11 border border-grid bg-academic/10 px-1">Moy.<br/>Cat. A</th>
-    <th className="w-11 border border-grid bg-academic/10 px-1">Moy.<br/>Cat. B</th>
-    <th className="w-11 border border-grid bg-academic/10 px-1">Moy.<br/>S{semester}</th>
-    <th className="w-11 border border-grid bg-academic/10 px-1">Crédits<br/>/30</th>
-    <th className="w-14 border border-grid bg-academic/10 px-1">Décision<br/>S{semester}</th>
+    <th className={`summary-${semester} summary-band w-11 border border-grid px-1`}>Moy.<br/>Cat. A</th>
+    <th className={`summary-${semester} summary-band w-11 border border-grid px-1`}>Moy.<br/>Cat. B</th>
+    <th className={`summary-${semester} summary-band w-11 border border-grid px-1`}>Moy.<br/>S{semester}</th>
+    <th className={`summary-${semester} summary-band w-11 border border-grid px-1`}>Crédits<br/>/30</th>
+    <th className={`summary-${semester} summary-band w-14 border border-grid px-1`}>Décision<br/>S{semester}</th>
   </>;
 }
 
@@ -207,10 +208,10 @@ function StudentRow({ student, semesters, annual }: { student: Student; semester
     <td className="border border-grid px-3 py-2 font-bold uppercase">{student.name}</td>
     {results.map((result, resultIndex) => <SemesterCells key={semesters[resultIndex]} student={student} result={result} />)}
     {annual && <>
-      <td className="border border-grid bg-muted/50 p-2 text-center font-extrabold">{annualMean.toFixed(2)}</td>
-      <td className="border border-grid p-2 text-center font-bold">{annualCredits}/60</td>
-      <td className="border border-grid p-2 text-center font-extrabold">{finalDecision}</td>
-      <td className="border border-grid px-2 text-center">{invalidUnits.length ? `Dettes : ${invalidUnits.join(", ")}` : mention(annualMean)}</td>
+      <td className="annual-cell border border-grid p-2 text-center font-extrabold">{annualMean.toFixed(2)}</td>
+      <td className="annual-cell border border-grid p-2 text-center font-bold">{annualCredits}/60</td>
+      <td className={`border border-grid p-2 text-center font-extrabold ${finalDecision === "AJOURNÉ" ? "status-fail" : finalDecision === "ADMIS AVEC DETTE" ? "status-warning" : "status-pass"}`}>{finalDecision}</td>
+      <td className="annual-cell border border-grid px-2 text-center">{invalidUnits.length ? `Dettes : ${invalidUnits.join(", ")}` : mention(annualMean)}</td>
     </>}
   </tr>;
 }
@@ -220,16 +221,16 @@ function SemesterCells({ student, result }: { student: Student; result: Semester
     {result.units.flatMap((unitResult) => [
       ...unitResult.courseIndexes.map((index) => {
         const note = student.notes[index] ?? 0;
-        return <td key={`${student.id}-${index}`} className={`border border-grid p-2 text-center font-mono ${note < 10 ? 'font-extrabold underline decoration-1 underline-offset-2' : ''}`}>{note.toFixed(1)}</td>;
+        return <td key={`${student.id}-${index}`} className={`${unitTone(unitResult.unit.code)} ue-cell border border-grid p-2 text-center font-mono ${note < 10 ? 'font-extrabold underline decoration-1 underline-offset-2' : ''}`}>{note.toFixed(1)}</td>;
       }),
-      <td key={`${student.id}-${unitResult.unit.code}-mean`} className="border border-grid bg-muted/50 p-2 text-center font-extrabold">{unitResult.mean.toFixed(2)}</td>,
-      <td key={`${student.id}-${unitResult.unit.code}-decision`} className="border border-grid p-2 text-center font-extrabold">{unitResult.valid ? "VALIDÉE" : "NON VALIDÉE"}</td>,
+      <td key={`${student.id}-${unitResult.unit.code}-mean`} className={`${unitTone(unitResult.unit.code)} ue-cell border border-grid p-2 text-center font-extrabold`}>{unitResult.mean.toFixed(2)}</td>,
+      <td key={`${student.id}-${unitResult.unit.code}-decision`} className={`border border-grid p-2 text-center font-extrabold ${unitResult.valid ? "status-pass" : "status-fail"}`}>{unitResult.valid ? "VALIDÉE" : "NON VALIDÉE"}</td>,
     ])}
-    <td className="border border-grid bg-academic/5 p-2 text-center font-extrabold">{result.categoryA.toFixed(2)}</td>
-    <td className="border border-grid bg-academic/5 p-2 text-center font-extrabold">{result.categoryB.toFixed(2)}</td>
-    <td className="border border-grid bg-academic/5 p-2 text-center font-extrabold">{result.mean.toFixed(2)}</td>
-    <td className="border border-grid bg-academic/5 p-2 text-center font-bold">{result.credits}/30</td>
-    <td className="border border-grid bg-academic/5 p-2 text-center font-extrabold">{result.decision}</td>
+    <td className={`summary-${result.units[0]?.unit.semester ?? 1} summary-cell border border-grid p-2 text-center font-extrabold`}>{result.categoryA.toFixed(2)}</td>
+    <td className={`summary-${result.units[0]?.unit.semester ?? 1} summary-cell border border-grid p-2 text-center font-extrabold`}>{result.categoryB.toFixed(2)}</td>
+    <td className={`summary-${result.units[0]?.unit.semester ?? 1} summary-cell border border-grid p-2 text-center font-extrabold`}>{result.mean.toFixed(2)}</td>
+    <td className={`summary-${result.units[0]?.unit.semester ?? 1} summary-cell border border-grid p-2 text-center font-bold`}>{result.credits}/30</td>
+    <td className={`border border-grid p-2 text-center font-extrabold ${result.decision === "VALIDÉ" ? "status-pass" : "status-fail"}`}>{result.decision}</td>
   </>;
 }
 

@@ -67,6 +67,14 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-grid: var(--grid);
+  --color-ue-1: var(--ue-1);
+  --color-ue-2: var(--ue-2);
+  --color-ue-3: var(--ue-3);
+  --color-ue-4: var(--ue-4);
+  --color-ue-5: var(--ue-5);
+  --color-ue-6: var(--ue-6);
+  --color-ue-7: var(--ue-7);
+  --color-ue-8: var(--ue-8);
 }
 
 :root {
@@ -110,6 +118,22 @@
   --success: oklch(0.48 0.14 151);
   --warning: oklch(0.58 0.17 45);
   --grid: oklch(0.84 0.015 255);
+  --ue-1: oklch(0.72 0.16 250);
+  --ue-2: oklch(0.76 0.15 205);
+  --ue-3: oklch(0.82 0.17 88);
+  --ue-4: oklch(0.73 0.18 145);
+  --ue-5: oklch(0.69 0.2 295);
+  --ue-6: oklch(0.72 0.2 335);
+  --ue-7: oklch(0.78 0.18 55);
+  --ue-8: oklch(0.7 0.16 175);
+  --semester-1: oklch(0.47 0.2 257);
+  --semester-2: oklch(0.52 0.2 335);
+  --summary-1: oklch(0.82 0.16 218);
+  --summary-2: oklch(0.84 0.17 76);
+  --annual-color: oklch(0.64 0.2 145);
+  --pass-color: oklch(0.7 0.18 145);
+  --warning-color: oklch(0.82 0.17 80);
+  --fail-color: oklch(0.66 0.22 25);
 }
 
 .dark {
@@ -158,6 +182,31 @@
     font-family: var(--font-sans);
   }
 }
+
+.ue-tone-1 { --ue-tone: var(--ue-1); }
+.ue-tone-2 { --ue-tone: var(--ue-2); }
+.ue-tone-3 { --ue-tone: var(--ue-3); }
+.ue-tone-4 { --ue-tone: var(--ue-4); }
+.ue-tone-5 { --ue-tone: var(--ue-5); }
+.ue-tone-6 { --ue-tone: var(--ue-6); }
+.ue-tone-7 { --ue-tone: var(--ue-7); }
+.ue-tone-8 { --ue-tone: var(--ue-8); }
+.ue-band { background: color-mix(in oklab, var(--ue-tone) 62%, white); color: var(--foreground); }
+.ue-band-strong { background: var(--ue-tone); color: oklch(0.16 0.025 255); }
+.ue-cell { background: color-mix(in oklab, var(--ue-tone) 24%, white); }
+.semester-1 { background: var(--semester-1); color: var(--academic-foreground); }
+.semester-2 { background: var(--semester-2); color: var(--academic-foreground); }
+.summary-1 { --summary-tone: var(--summary-1); }
+.summary-2 { --summary-tone: var(--summary-2); }
+.summary-strong { background: var(--summary-tone); color: oklch(0.16 0.025 255); }
+.summary-band { background: color-mix(in oklab, var(--summary-tone) 72%, white); }
+.summary-cell { background: color-mix(in oklab, var(--summary-tone) 38%, white); }
+.annual-title { background: var(--annual-color); color: oklch(0.16 0.025 255); }
+.annual-band { background: color-mix(in oklab, var(--annual-color) 74%, white); color: oklch(0.16 0.025 255); }
+.annual-cell { background: color-mix(in oklab, var(--annual-color) 30%, white); }
+.status-pass { background: color-mix(in oklab, var(--pass-color) 62%, white); color: oklch(0.24 0.08 145); }
+.status-warning { background: color-mix(in oklab, var(--warning-color) 72%, white); color: oklch(0.3 0.08 75); }
+.status-fail { background: color-mix(in oklab, var(--fail-color) 64%, white); color: oklch(0.25 0.1 25); }
 
 @media print {
   @page { size: A3 landscape; margin: 8mm; }
