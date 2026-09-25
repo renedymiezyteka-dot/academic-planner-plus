@@ -110,7 +110,7 @@ function Index() {
             </thead>
             <tbody>
               {students.map((student) => {
-                const shownNotes = visibleCourseIndexes.map((index) => student.notes[index]);
+                const shownNotes = visibleCourseIndexes.map((index) => student.notes[index] ?? 0);
                 const s1 = average(student.notes.slice(0,8)); const s2 = average(student.notes.slice(8)); const mean = average(shownNotes);
                 return <tr key={student.id} className="transition-colors hover:bg-highlight/10">
                   <td className="border border-grid p-2 text-center font-mono font-bold">{student.id}</td><td className="border border-grid px-3 py-2 font-bold uppercase">{student.name}</td>
