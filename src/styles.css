@@ -162,6 +162,8 @@
 @media print {
   @page { size: A3 landscape; margin: 8mm; }
   body { background: white; }
+  .annual-grid { font-size: 6px !important; }
+  .annual-grid th, .annual-grid td { padding: 2px !important; }
   .no-print { display: none !important; }
   .print-sheet { box-shadow: none !important; border: 0 !important; width: 100% !important; max-width: none !important; }
   .print-scroll { overflow: visible !important; }
