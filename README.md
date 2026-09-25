@@ -1,14 +1,16 @@
-# Welcome to your Lovable project
+# Academic Planner Plus
+
+Tu as compris l'idée de cette grille non ? Ce n'est qu'une partie. inspire toi de ce document pour me redonner un exemple d'une grille complet pour une année académique LMD semestre 1 et semestre 2. Tu peux me donner en html qu'on peut télecharger en pdf. parametres les couleurs aussi. fais ça d'une maniere moderne.
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/0673632d-57ee-42e0-addf-3e51095e3d69).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +22,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
