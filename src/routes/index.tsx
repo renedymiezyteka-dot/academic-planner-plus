@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, type CSSProperties } from "react";
-import { Download, Palette, RotateCcw, SlidersHorizontal } from "lucide-react";
+import { Download, Palette, RotateCcw, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -47,6 +46,7 @@ function Index() {
   const [primary, setPrimary] = useState("#0f172a");
   const [accent, setAccent] = useState("#facc15");
   const [compact, setCompact] = useState(true);
+  const [configOpen, setConfigOpen] = useState(false);
   const visibleUnits = useMemo(() => units.filter((unit) => view === "annual" || unit.semester === (view === "s1" ? 1 : 2)), [view]);
   const visibleCourseIndexes = visibleUnits.flatMap((unit) => unit.courses.map((course) => units.flatMap((item) => item.courses).findIndex((item) => item.code === course.code)));
   const totalCredits = visibleUnits.reduce((sum, unit) => sum + unit.courses.reduce((n, course) => n + course.credits, 0), 0);
@@ -63,21 +63,25 @@ function Index() {
           {([['annual','Année complète'],['s1','Semestre 1'],['s2','Semestre 2']] as [View,string][]).map(([value,label]) => (
             <Button key={value} size="sm" variant={view === value ? "default" : "outline"} onClick={() => setView(value)}>{label}</Button>
           ))}
-          <Sheet>
-            <SheetTrigger asChild><Button size="sm" variant="outline"><SlidersHorizontal /> Paramètres</Button></SheetTrigger>
-            <SheetContent>
-              <SheetHeader><SheetTitle>Personnaliser la grille</SheetTitle><SheetDescription>Ces choix sont conservés lors de l’impression en PDF.</SheetDescription></SheetHeader>
-              <div className="mt-8 space-y-7">
-                <ColorField label="Couleur principale" value={primary} onChange={setPrimary} />
-                <ColorField label="Couleur d’accent" value={accent} onChange={setAccent} />
-                <label className="flex items-center justify-between gap-4 text-sm font-medium"><span>Affichage compact</span><input type="checkbox" checked={compact} onChange={(event) => setCompact(event.target.checked)} className="size-4 accent-academic" /></label>
-                <Button variant="outline" className="w-full" onClick={() => { setPrimary("#0f172a"); setAccent("#facc15"); setCompact(true); }}><RotateCcw /> Réinitialiser</Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <Button size="sm" variant="outline" onClick={() => setConfigOpen(true)}><SlidersHorizontal /> Paramètres</Button>
           <Button size="sm" onClick={() => window.print()}><Download /> Télécharger en PDF</Button>
         </div>
       </div>
+
+      {configOpen && <div className="no-print fixed inset-0 z-50 bg-foreground/55" onClick={() => setConfigOpen(false)}>
+        <aside role="dialog" aria-modal="true" aria-labelledby="config-title" className="ml-auto h-full w-[min(90vw,24rem)] border-l border-grid bg-background p-6 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
+            <div className="min-w-0"><h2 id="config-title" className="text-lg font-semibold">Personnaliser la grille</h2><p className="mt-1 text-sm text-muted-foreground">Ces choix sont conservés lors de l’impression en PDF.</p></div>
+            <Button size="icon" variant="ghost" aria-label="Fermer les paramètres" onClick={() => setConfigOpen(false)}><X /></Button>
+          </div>
+          <div className="mt-8 space-y-7">
+            <ColorField label="Couleur principale" value={primary} onChange={setPrimary} />
+            <ColorField label="Couleur d’accent" value={accent} onChange={setAccent} />
+            <label className="flex items-center justify-between gap-4 text-sm font-medium"><span>Affichage compact</span><input type="checkbox" checked={compact} onChange={(event) => setCompact(event.target.checked)} className="size-4 accent-academic" /></label>
+            <Button variant="outline" className="w-full" onClick={() => { setPrimary("#0f172a"); setAccent("#facc15"); setCompact(true); }}><RotateCcw /> Réinitialiser</Button>
+          </div>
+        </aside>
+      </div>}
 
       <article className="print-sheet mx-auto max-w-[1800px] overflow-hidden border border-grid bg-card shadow-xl">
         <header className="grid grid-cols-1 gap-5 border-b border-grid p-5 md:grid-cols-[1fr_auto] md:items-end">
